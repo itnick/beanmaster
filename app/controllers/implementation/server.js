@@ -197,11 +197,7 @@ class ServerController extends AbstractController {
                 "total-jobs": tube_info["total-jobs"],
                 "current-using": tube_info["current-using"],
                 "current-watching": tube_info["current-watching"],
-                "current-waiting": tube_info["current-waiting"],
-                "cmd-delete": tube_info["cmd-delete"],
-                "cmd-pause-tube": tube_info["cmd-pause-tube"],
-                "pause": tube_info["pause"],
-                "pause-time-left": tube_info["pause-time-left"]
+                "current-waiting": tube_info["current-waiting"]
             }
             tubes_info[tubes[i]] = tube_info
 
