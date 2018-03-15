@@ -111,7 +111,7 @@ class TubeController extends AbstractController {
 		const name = _.get(_.find(configs, {host: host, port: port}), 'name', null);
 		const connection = await BeanstalkConnectionManager.connect(host, port);
 
-		const [tube_info] = await connection.stats_tubeAsync(tube);
+		let [tube_info] = await connection.stats_tubeAsync(tube);
 		let stats = {
 			'peek_ready': null,
 			'peek_delayed': null,
@@ -126,6 +126,26 @@ class TubeController extends AbstractController {
 		}
 
 		await BeanstalkConnectionManager.closeConnection(connection);
+
+		// Add active (sum of urgent, ready, reserved, delayed, buried)
+        tube_info = {
+			"name": tube_info.name,
+            "current-jobs-urgent": tube_info["current-jobs-urgent"],
+            "current-jobs-ready": tube_info["current-jobs-ready"],
+            "current-jobs-reserved": tube_info["current-jobs-reserved"],
+            "current-jobs-delayed": tube_info["current-jobs-delayed"],
+            "current-jobs-buried": tube_info["current-jobs-buried"],
+			"active": tube_info["current-jobs-urgent"] + tube_info["current-jobs-ready"] + tube_info["current-jobs-reserved"] + tube_info["current-jobs-delayed"] + tube_info["current-jobs-buried"],
+            "total-jobs": tube_info["total-jobs"],
+            "current-using": tube_info["current-using"],
+            "current-watching": tube_info["current-watching"],
+            "current-waiting": tube_info["current-waiting"],
+            "cmd-delete": tube_info["cmd-delete"],
+            "cmd-pause-tube": tube_info["cmd-pause-tube"],
+            "pause": tube_info["pause"],
+            "pause-time-left": tube_info["pause-time-left"]
+		}
+
 		return {
 			name: name,
 			tube_info: tube_info || {},

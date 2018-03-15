@@ -221,9 +221,11 @@ function getInfo(row_element) {
 				var tds = row_element.find('td');
 				tds.eq(3).html(data.stat['current-connections']);
 				tds.eq(4).html(data.stat.version);
-				tds.eq(5).html(data.stat['total-jobs']);
-				tds.eq(6).html(data.stat.pid);
-				tds.eq(7).html(data.stat.uptime);
+				// Add active (sum of urgent, ready, reserved, delayed, buried)
+                tds.eq(5).html(data.stat['current-jobs-urgent'] + data.stat['current-jobs-ready'] + data.stat['current-jobs-reserved'] + data.stat['current-jobs-delayed'] + data.stat['current-jobs-buried']);
+				tds.eq(6).html(data.stat['total-jobs']);
+				tds.eq(7).html(data.stat.pid);
+				tds.eq(8).html(data.stat.uptime);
 			}
 		},
 		error: function (err) {
